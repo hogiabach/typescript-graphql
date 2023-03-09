@@ -1,9 +1,11 @@
 import {
   GraphQLInt,
+  GraphQLList,
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLString,
 } from "graphql";
+import db from "../database/db";
 
 const books = [
   { title: "My Book", id: "1", genre: "thriller", authorId: "1" },
@@ -30,14 +32,12 @@ const BookType = new GraphQLObjectType({
     genre: { type: GraphQLString },
     author: {
       type: AuthorType,
-      resolve(parent, args) {
-        return authors.filter((author) => author.id == parent.authorId)[0];
-      },
+      resolve(parent, args) {},
     },
   }),
 });
 
-const AuthorType = new GraphQLObjectType({
+const AuthorType: GraphQLObjectType = new GraphQLObjectType({
   name: "Author",
   fields: () => ({
     id: {
@@ -49,6 +49,12 @@ const AuthorType = new GraphQLObjectType({
     rating: {
       type: GraphQLInt,
     },
+    books: {
+      type: new GraphQLList(BookType),
+      resolve(parent, args) {
+        return books.filter((book) => parent.id == book.authorId);
+      },
+    },
   }),
 });
 
@@ -59,14 +65,14 @@ const RootQuery = new GraphQLObjectType({
       type: BookType,
       args: { id: { type: GraphQLString } },
       resolve(parent, { id }) {
-        return books.filter((book) => book.id == id)[0];
+        return db().select("*").from("books").where("id", id).first();
       },
     },
     author: {
       type: AuthorType,
       args: { id: { type: GraphQLString } },
       resolve(parent, { id }) {
-        return authors.filter((author) => author.id == id)[0];
+        return db().select("*").from("authors").where("id", id).first();
       },
     },
   },

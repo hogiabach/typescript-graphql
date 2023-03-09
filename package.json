@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "knex": "./node_modules/.bin/knex --knexfile src/database/knex.ts"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +14,10 @@
     "express": "^4.18.2",
     "express-graphql": "^0.12.0",
     "graphql": "^16.6.0",
-    "typescript": "^4.9.5"
+    "knex": "^2.4.2",
+    "sqlite3": "^5.1.4",
+    "typescript": "^4.9.5",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.17",
