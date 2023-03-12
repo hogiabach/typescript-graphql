@@ -8,10 +8,10 @@ const configs: IFKnexConfig = {
   development: {
     client: "sqlite3",
     connection: {
-      filename: "./dev.sqlite3",
+      filename: `${__dirname}/dev.sqlite3`,
     },
     debug: true,
-    useNullAsDefault: true
+    useNullAsDefault: true,
   },
 };
 

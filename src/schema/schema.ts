@@ -7,19 +7,6 @@ import {
 } from "graphql";
 import db from "../database/db";
 
-const books = [
-  { title: "My Book", id: "1", genre: "thriller", authorId: "1" },
-  { title: "History of the World", id: "2", genre: "history", authorId: "1" },
-  { title: "The book of stories", id: "3", genre: "fiction", authorId: "2" },
-];
-
-const authors = [
-  { name: "Jack Jones", age: "50", rating: 5, id: "1" },
-  { name: "Ron Tamara", age: "25", rating: 5, id: "2" },
-  { name: "Ranji Iman", age: "60", rating: 5, id: "3" },
-  { name: "Ivan Novic", age: "22", rating: 5, id: "4" },
-];
-
 const BookType = new GraphQLObjectType({
   name: "Book",
   fields: () => ({
@@ -32,7 +19,13 @@ const BookType = new GraphQLObjectType({
     genre: { type: GraphQLString },
     author: {
       type: AuthorType,
-      resolve(parent, args) {},
+      resolve(parent, args) {
+        return db()
+          .select("*")
+          .from("authors")
+          .where("id", parent.authorId)
+          .first();
+      },
     },
   }),
 });
@@ -51,9 +44,7 @@ const AuthorType: GraphQLObjectType = new GraphQLObjectType({
     },
     books: {
       type: new GraphQLList(BookType),
-      resolve(parent, args) {
-        return books.filter((book) => parent.id == book.authorId);
-      },
+      resolve(parent, args) {},
     },
   }),
 });
