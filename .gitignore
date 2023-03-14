@@ -1,2 +1,10 @@
+# Folders
 /build 
 /node_modules
+/**/*.sqlite3
+
+# Files
+*.env
+
+
+
